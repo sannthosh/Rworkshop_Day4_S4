@@ -1,0 +1,204 @@
+setwd("E:/Desktop Backups/17 Desktop 9Sep18/iPrimed/TTT/DAY 3/Session 3/codes")
+xbar = 13.25            # sample mean
+mu0 = 12            # hypothesized value
+sigma = 3.2            # population standard deviation
+n = 40                 # sample size
+z = (xbar - mu0)/(sigma/sqrt(n))
+z                      # test statistic
+#critical value approach
+alpha = .05
+z.alpha = qnorm(1-alpha)
+z.alpha
+z >= z.alpha
+z                      # test statistic
+#p-value approach
+probvalue <- pnorm(z)
+probvalue
+pvalue <- 1-probvalue
+pvalue
+pvalue <= alpha
+setwd("E:/Desktop Backups/17 Desktop 9Sep18/iPrimed/TTT/DAY 3/Session 3/codes")
+mydata=read.csv("hypothesis_testing.csv", header=TRUE)
+Current=mydata$Current
+Current=mydata$Current
+New=mydata$New
+tstat1=t.test(Current, New)
+tstat1
+tstat2=t.test(Current, New, var.equal=TRUE)
+tstat2
+tstat2=t.test(Current, New, var.equal=FALSE, alternative = "two.sided")
+tstat2
+#Data in two numeric vectors
+women_weight <- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5)
+men_weight <- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4)
+# Create a data frame
+my_data <- data.frame(
+group = rep(c("Woman", "Man"), each = 9),
+weight = c(women_weight,  men_weight)
+)
+# Compute t-test
+res <- t.test(women_weight, men_weight, var.equal = TRUE)
+res
+setwd("E:/Desktop Backups/17 Desktop 9Sep18/iPrimed/TTT/DAY 4/Session 3/code")
+library(titanic)
+install.packages("titanic")
+library(titanic)
+data("titanic_train")
+data("titanic_test")
+titanic_test$Survived <- NA
+View(titanic_test)
+View(titanic_test)
+str(titanic_train)
+is.na(titanic_train)
+complete_data <- rbind(titanic_train,titanic_test)
+colSums(is.na(complete_data))
+colSums(complete_data == '')
+setwd("E:/Desktop Backups/17 Desktop 9Sep18/iPrimed/TTT/DAY 4/Session 3/code")
+# Importing the dataset
+dataset = read.csv('Social_Network_Ads.csv')
+View(dataset)
+View(dataset)
+dataset = dataset[3:5]
+# Encoding the target feature as factor
+dataset$Purchased
+# Encoding the target feature as factor
+class(dataset$Purchased)
+dataset$Purchased = factor(dataset$Purchased, levels = c(0, 1))
+# Encoding the target feature as factor
+class(dataset$Purchased)
+# Splitting the dataset into the Training set and Test set
+# install.packages('caTools')
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Purchased, SplitRatio = 0.75)
+training_set = subset(dataset, split == TRUE)
+test_set = subset(dataset, split == FALSE)
+# Feature Scaling
+training_set[-3] = scale(training_set[-3])
+test_set[-3] = scale(test_set[-3])
+# Fitting Logistic Regression to the Training set
+classifier = glm(formula = Purchased ~ .,
+family = binomial,
+data = training_set)
+View(training_set)
+View(training_set)
+# Fitting Logistic Regression to the Training set
+classifier = glm(formula = Purchased ~ .,
+family = binomial,
+data = training_set)
+summary(classifier)
+# Predicting the Test set results
+prob_pred = predict(classifier, type = 'response', newdata = test_set[-3])
+y_pred = ifelse(prob_pred > 0.5, 1, 0)
+y_pred
+prob_pred
+y_pred
+# Making the Confusion Matrix
+cm = table(test_set[, 3], y_pred > 0.5)
+cm
+# K-Nearest Neighbors (K-NN)
+library(caret)
+# K-Nearest Neighbors (K-NN)
+library(caret)
+# Importing the dataset
+dataset = read.csv('Social_Network_Ads.csv')
+dataset = dataset[3:5]
+class(dataset$Purchased)
+# Encoding the target feature as factor
+dataset$Purchased = factor(dataset$Purchased, levels = c(0, 1))
+# Splitting the dataset into the Training set and Test set
+# install.packages('caTools')
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$Purchased, SplitRatio = 0.75)
+training_set = subset(dataset, split == TRUE)
+test_set = subset(dataset, split == FALSE)
+# Feature Scaling
+training_set[-3] = scale(training_set[-3])
+test_set[-3] = scale(test_set[-3])
+# find k
+trctrl <- trainControl(method = "repeatedcv", number = 20, repeats = 3)
+set.seed(3333)
+knn_fit <- train(Purchased ~., data = training_set, method = "knn",
+trControl=trctrl,
+preProcess = c("center", "scale"),
+tuneLength = 20)
+knn_fit
+# Fitting K-NN to the Training set and Predicting the Test set results
+library(class)
+y_pred = knn(train = training_set[, -3],
+test = test_set[, -3],
+cl = training_set[, 3],
+k = 7,
+prob = TRUE)
+# Making the Confusion Matrix
+cm = table(test_set[, 3], y_pred)
+cm
+# Visualising the Training set results
+library(ElemStatLearn)
+set = training_set
+X1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)
+X2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)
+grid_set = expand.grid(X1, X2)
+colnames(grid_set) = c('Age', 'EstimatedSalary')
+y_grid = knn(train = training_set[, -3], test = grid_set, cl = training_set[, 3], k = 5)
+plot(set[, -3],
+main = 'K-NN (Training set)',
+xlab = 'Age', ylab = 'Estimated Salary',
+xlim = range(X1), ylim = range(X2))
+contour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)
+points(grid_set, pch = '.', col = ifelse(y_grid == 1, 'springgreen3', 'tomato'))
+points(set, pch = 21, bg = ifelse(set[, 3] == 1, 'green4', 'red3'))
+# Importing the dataset
+dataset = read.csv('Mall_Customers.csv')
+setwd("E:/Desktop Backups/17 Desktop 9Sep18/iPrimed/TTT/DAY 4/Session 4/code")
+# Importing the dataset
+dataset = read.csv('Mall_Customers.csv')
+dataset = dataset[4:5]
+View(dataset)
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss = vector()
+# Using the elbow method to find the optimal number of clusters
+set.seed(6)
+wcss = vector()
+for (i in 1:10) wcss[i] = sum(kmeans(dataset, i)$withinss)
+plot(1:10,
+wcss,
+type = 'b',
+main = paste('The Elbow Method'),
+xlab = 'Number of clusters',
+ylab = 'WCSS')
+# Fitting K-Means to the dataset
+set.seed(29)
+kmeans = kmeans(x = dataset, centers = 5)
+y_kmeans = kmeans$cluster
+y_kmeans
+# Visualising the clusters
+library(cluster)
+clusplot(dataset,
+y_kmeans,
+lines = 0,
+shade = TRUE,
+color = TRUE,
+labels = 2,
+plotchar = FALSE,
+span = TRUE,
+main = paste('Clusters of customers'),
+xlab = 'Annual Income',
+ylab = 'Spending Score')
+kmeans = kmeans(x = dataset, centers = 3)
+y_kmeans = kmeans$cluster
+# Visualising the clusters
+library(cluster)
+clusplot(dataset,
+y_kmeans,
+lines = 0,
+shade = TRUE,
+color = TRUE,
+labels = 2,
+plotchar = FALSE,
+span = TRUE,
+main = paste('Clusters of customers'),
+xlab = 'Annual Income',
+ylab = 'Spending Score')
